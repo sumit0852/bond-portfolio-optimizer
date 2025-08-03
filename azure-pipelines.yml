@@ -50,7 +50,7 @@ stages:
         - task: Docker@2
           displayName: 'Build and push Docker image'
           inputs:
-            containerRegistry: '$(acrName)'
+            containerRegistry: '$(azureSubscription)'
             repository: '$(imageRepository)'
             command: 'buildAndPush'
             Dockerfile: '**/Dockerfile'
