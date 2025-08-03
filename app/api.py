@@ -14,7 +14,7 @@ class OptimizationInput(BaseModel):
 
 @app.get("/")
 def root():
-    return {"message": "Bond Portfolio Optimizer API is running 🚀"}
+    return {"message": "Bond Portfolio Optimizer API is running via Pipeline ;) 🚀"}
 
 @app.post("/optimize")
 def run_optimization(input_data: OptimizationInput):
