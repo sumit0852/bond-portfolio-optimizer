@@ -26,7 +26,7 @@ variables:
   resourceGroupName: 'FastAPI-Learning-Sumit-RG'
 
   # The name of the service connection you created to link to Azure.
-  azureSubscription: 'Pay-As-You-Go'
+  azureSubscription: 'AzureDevOpsConnection'
 
 # --------------------------------------------------------------------------------------
 # Section 2: Stages and Jobs
