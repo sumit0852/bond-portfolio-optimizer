@@ -1,0 +1,74 @@
+# --------------------------------------------------------------------------------------
+# Section 1: Trigger and Variables
+# This section defines when the pipeline runs and sets up reusable variables.
+# --------------------------------------------------------------------------------------
+trigger:
+  - main # This pipeline will run automatically every time a commit is pushed to the 'main' branch.
+
+variables:
+  # The name of your Azure Container Registry.
+  # Replace <your-acr-name> with the name you chose (e.g., 'fastapilearningacr123').
+  acrName: '<your-acr-name>'
+  
+  # The name of the Docker image repository within your ACR.
+  # This is the name you gave your image when you pushed it initially.
+  imageRepository: 'myfastapiapp'
+
+  # The tag for the new image. We'll use the build ID to make it unique.
+  imageTag: '$(Build.BuildId)'
+
+  # The name of your Container App.
+  # Replace <your-container-app-name> with the name you chose (e.g., 'myfastapiapp123').
+  containerAppName: '<your-container-app-name>'
+
+  # The name of the resource group where your Container App is located.
+  # This should be the same as your service connection.
+  resourceGroupName: 'FastAPI-Learning-RG'
+
+  # The name of the service connection you created to link to Azure.
+  azureSubscription: 'MyAzureSubscription'
+
+# --------------------------------------------------------------------------------------
+# Section 2: Stages and Jobs
+# This section defines the jobs that will run on the build agent.
+# --------------------------------------------------------------------------------------
+pool:
+  vmImage: 'ubuntu-latest' # Use a Microsoft-hosted Ubuntu agent from the free tier.
+  
+stages:
+  - stage: BuildAndDeploy
+    displayName: 'Build and Deploy'
+    jobs:
+      - job: BuildAndDeploy
+        displayName: 'Build and Deploy to Container Apps'
+        steps:
+        
+        # --------------------------------------------------------------------------------------
+        # Step 1: Build and Push the Docker Image
+        # This task builds your image from your Dockerfile and pushes it to ACR.
+        # --------------------------------------------------------------------------------------
+        - task: Docker@2
+          displayName: 'Build and push Docker image'
+          inputs:
+            containerRegistry: '$(acrName)'
+            repository: '$(imageRepository)'
+            command: 'buildAndPush'
+            Dockerfile: '**/Dockerfile'
+            tags: '$(imageTag)'
+            
+        # --------------------------------------------------------------------------------------
+        # Step 2: Update the Azure Container App
+        # This task uses the Azure CLI to update your Container App with the new image.
+        # --------------------------------------------------------------------------------------
+        - task: AzureCLI@2
+          displayName: 'Update Container App'
+          inputs:
+            azureSubscription: '$(azureSubscription)'
+            scriptType: 'bash'
+            scriptLocation: 'inlineScript'
+            inlineScript: |
+              # This single line of Azure CLI updates your Container App.
+              az containerapp update \
+              --name $(containerAppName) \
+              --resource-group $(resourceGroupName) \
+              --image $(acrName).azurecr.io/$(imageRepository):$(imageTag)
