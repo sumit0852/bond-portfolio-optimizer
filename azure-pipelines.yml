@@ -8,25 +8,25 @@ trigger:
 variables:
   # The name of your Azure Container Registry.
   # Replace <your-acr-name> with the name you chose (e.g., 'fastapilearningacr123').
-  acrName: '<your-acr-name>'
+  acrName: 'fastapilearningsumitacr123'
   
   # The name of the Docker image repository within your ACR.
   # This is the name you gave your image when you pushed it initially.
-  imageRepository: 'myfastapiapp'
+  imageRepository: 'bond-optimizer'
 
   # The tag for the new image. We'll use the build ID to make it unique.
   imageTag: '$(Build.BuildId)'
 
   # The name of your Container App.
   # Replace <your-container-app-name> with the name you chose (e.g., 'myfastapiapp123').
-  containerAppName: '<your-container-app-name>'
+  containerAppName: 'myfastapiappsumit123'
 
   # The name of the resource group where your Container App is located.
   # This should be the same as your service connection.
-  resourceGroupName: 'FastAPI-Learning-RG'
+  resourceGroupName: 'FastAPI-Learning-Sumit-RG'
 
   # The name of the service connection you created to link to Azure.
-  azureSubscription: 'MyAzureSubscription'
+  azureSubscription: 'Pay-As-You-Go'
 
 # --------------------------------------------------------------------------------------
 # Section 2: Stages and Jobs
